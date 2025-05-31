@@ -1,7 +1,6 @@
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { useIntersectionObserver } from '@vueuse/core'
+import { lazyPlugin } from './directives'
 
 import App from './App.vue'
 import router from './router'
@@ -11,18 +10,5 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-
+app.use(lazyPlugin)
 app.mount('#app')
-
-app.directive('img-lazy', {
-  mounted(el, binding) {
-  useIntersectionObserver(
-    el,
-    ([entry],) => {
-      if (entry.isIntersecting) {
-        el.src = binding.value
-      }
-    },
-  )
-}
-})
