@@ -1,7 +1,7 @@
 <script setup>
 import { getTopCategoryAPI } from '@/apis/category';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import {getBannerAPI} from '@/apis/home'
 import GoodsItem from '../Home/components/GoodsItem.vue'
 
@@ -16,12 +16,15 @@ onMounted(() => {
 })
 const CategoryData = ref({});
 const route = useRoute();
-const getTopCategory = async () => {
-  const res = await getTopCategoryAPI(route.params.id);
+const getTopCategory = async (id=route.params.id) => {
+  const res = await getTopCategoryAPI(id);
   CategoryData.value = res.result;
 };
 onMounted(() => {
   getTopCategory(); 
+})
+onBeforeRouteUpdate((to) => {
+  getTopCategory(to.params.id);
 })
 </script>
 
