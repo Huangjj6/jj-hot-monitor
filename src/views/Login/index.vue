@@ -4,28 +4,36 @@ import { ref } from 'vue'
 const form = ref({
   account:'',
   password:'',
-  agree:true
+  agree:false
 })
 //规则对象
 const rules={
-    account:[
-        {required:true,message:'用户名不能为空',trigger:'blur'},
-    ],
-    password:[
-        {required:true,message:'密码不能为空',trigger:'blur'},
-        {min:6,max:14,message:'密码长度必须在6-14位之间',trigger:'blur'}
-    ],
-    agree:[
-      {
-        validator:(rule,value,callback)=>{
-          if(value){
-            callback()
-          }else{
-            callback(new Error('请勾选协议'))
-          }
+  account:[
+      {required:true,message:'用户名不能为空',trigger:'blur'},
+  ],
+  password:[
+      {required:true,message:'密码不能为空',trigger:'blur'},
+      {min:6,max:14,message:'密码长度必须在6-14位之间',trigger:'blur'}
+  ],
+  agree:[
+    {
+      validator:(rule,value,callback)=>{
+        if(value){
+          callback()
+        }else{
+          callback(new Error('请勾选协议'))
         }
       }
-    ]
+    }
+  ]
+}
+const formRef=ref(null)
+const doLogin = ()=>{
+  formRef.value.validate((valid)=>{
+    if(valid){
+      console.log('校验通过');
+    }
+  })
 }
 </script>
 
@@ -52,8 +60,7 @@ const rules={
         <div class="account-box">
           <div class="form">
             <el-form :model="form" :rules="rules" label-position="right" label-width="60px"
-              ref="formRef"
-              status-icon>
+              ref="formRef" status-icon>
               <el-form-item prop="account" label="账户">
                 <el-input v-model="form.account" />
               </el-form-item>
@@ -65,7 +72,7 @@ const rules={
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
             </el-form>
           </div>
         </div>
