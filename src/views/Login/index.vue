@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import {loginAPI} from '@/apis/user'
+import { ElMessage } from 'element-plus'
+import {useRouter} from 'vue-router'
 //表单对象
 const form = ref({
   account:'',
@@ -17,6 +20,7 @@ const rules={
   ],
   agree:[
     {
+      //自定义规则
       validator:(rule,value,callback)=>{
         if(value){
           callback()
@@ -28,10 +32,17 @@ const rules={
   ]
 }
 const formRef=ref(null)
+const router = useRouter()
 const doLogin = ()=>{
-  formRef.value.validate((valid)=>{
+  const {account,password} = form.value
+  //同意校验
+  formRef.value.validate(async (valid)=>{
     if(valid){
-      console.log('校验通过');
+      //登录
+      const res = await loginAPI({account,password})
+      console.log(res);
+        ElMessage({type:'success',message:'登录成功'})
+        router.replace({path:'/'})
     }
   })
 }
