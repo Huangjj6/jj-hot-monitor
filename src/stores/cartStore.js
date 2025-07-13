@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref,computed } from 'vue'
+
 
 export const useCartStore = defineStore('cart',()=>{
     const cartList=ref([])
@@ -19,7 +20,9 @@ export const useCartStore = defineStore('cart',()=>{
         cartList.value.splice(idx,1)
       }
     }
-    return{cartList,addCart,delCart}
+    const allCount=computed(()=>cartList.value.reduce((a,c)=>a+c.count,0))
+    const allPrice=computed(()=>cartList.value.reduce((a,c)=>a+c.price*c.count,0))
+    return{cartList,addCart,delCart,allCount,allPrice}
 },
 {
   persist: true,
