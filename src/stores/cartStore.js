@@ -39,6 +39,7 @@ export const useCartStore = defineStore('cart',()=>{
       }
       
     }
+
     const clearCart=()=>{
       cartList.value=[]
     }
@@ -55,7 +56,8 @@ export const useCartStore = defineStore('cart',()=>{
     const allCheck=(selected)=>{
       cartList.value.forEach(item=>item.selected=selected)
     }
-    return{cartList,addCart,delCart,allCount,allPrice,clearCart,singleCheck,isAll,allCheck,selectedCount,selectedPrice}
+    return{cartList,addCart,delCart,allCount,allPrice,clearCart,singleCheck,isAll,allCheck,selectedCount,selectedPrice,updateNewList}
+
 
 
 
