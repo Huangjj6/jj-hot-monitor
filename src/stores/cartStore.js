@@ -39,7 +39,9 @@ export const useCartStore = defineStore('cart',()=>{
       }
       
     }
-
+    const clearCart=()=>{
+      cartList.value=[]
+    }
     const singleCheck=(skuId,selected)=>{
       const item=cartList.value.find((item)=>item.skuId===skuId)
       item.selected=selected
@@ -53,7 +55,8 @@ export const useCartStore = defineStore('cart',()=>{
     const allCheck=(selected)=>{
       cartList.value.forEach(item=>item.selected=selected)
     }
-    return{cartList,addCart,delCart,allCount,allPrice,singleCheck,isAll,allCheck,selectedCount,selectedPrice}
+    return{cartList,addCart,delCart,allCount,allPrice,clearCart,singleCheck,isAll,allCheck,selectedCount,selectedPrice}
+
 
 
 
