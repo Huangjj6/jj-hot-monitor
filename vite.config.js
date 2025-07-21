@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-
+// import path from 'path'
 import { defineConfig } from 'vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -19,12 +19,17 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver({importStyle: 'sass'})],
     }),
-    ElementPlus(),
+    ElementPlus({
+      useSource: true,
+    }),
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
+    // alias:{
+    //   '/~': `${path.resolve(__dirname, 'src')}/`,
+    // }
   },
   css: {
     preprocessorOptions: {

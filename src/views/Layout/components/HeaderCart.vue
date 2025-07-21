@@ -217,6 +217,5 @@ const cartStore = useCartStore();
         }
       }
     }
-  }
-}
+  }}
 </style>
