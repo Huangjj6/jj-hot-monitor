@@ -1,6 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { getCheckInfoAPI } from '@/apis/checkout'
+import { createOrderAPI, getCheckInfoAPI } from '@/apis/checkout'
+import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore'
+const router=useRouter()
+const cartStore=useCartStore()
+
 const curAddress = ref({})
 const checkInfo = ref({}) // 订单对象
 const getCheckInfo=async()=>{
@@ -19,6 +24,29 @@ const switchAddress=(item)=>{
 const confirmAddress=()=>{
   curAddress.value=activeAddress.value
   showDialog.value=false
+}
+const createOrder=async()=>{
+  const res=await createOrderAPI({
+    deliveryTimeType:1,
+    payType:1,
+    payChannel:1,
+    buyerMessage:1,
+    goods:checkInfo.value.goods.map(item=>{
+      return{
+        skuId:item.skuId,
+        count:item.count
+      }
+    }),
+    addressId:curAddress.value.id
+  })
+  const orderId=res.result.id
+  router.push({
+    path:'/pay',
+    query:{
+      id:orderId
+    }
+  })
+  cartStore.updateNewList()
 }
 </script>
 
@@ -69,7 +97,7 @@ const confirmAddress=()=>{
                   </a>
                 </td>
                 <td>&yen;{{ i.price }}</td>
-                <td>{{ i.price }}</td>
+                <td>{{ i.count }}</td>
                 <td>&yen;{{ i.totalPrice }}</td>
                 <td>&yen;{{ i.totalPayPrice }}</td>
               </tr>
@@ -114,7 +142,7 @@ const confirmAddress=()=>{
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" >提交订单</el-button>
+          <el-button type="primary" size="large" @click="createOrder">提交订单</el-button>
         </div>
       </div>
     </div>
